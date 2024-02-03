@@ -6,7 +6,7 @@ namespace CulturalShare.Gateway.Middleware.MiddlewareClasses;
 
 public class HandlingExceptionsMiddleware
 {
-    public RequestDelegate _next { get; }
+    private RequestDelegate _next { get; }
     public HandlingExceptionsMiddleware(RequestDelegate next)
     {
         _next = next;
