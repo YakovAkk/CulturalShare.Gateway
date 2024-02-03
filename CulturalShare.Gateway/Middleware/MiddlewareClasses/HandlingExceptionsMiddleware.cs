@@ -55,7 +55,7 @@ public class HandlingExceptionsMiddleware
     }
     private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
     {
-        IReadOnlyDictionary<string, string[]> errors = null;
+        IReadOnlyDictionary<string, string[]> errors = null!;
         if (exception is ValidationException validationException)
         {
             errors = validationException.Errors.GroupBy(
