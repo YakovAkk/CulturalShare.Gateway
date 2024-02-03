@@ -6,7 +6,7 @@ namespace CulturalShare.Gateway.Middleware.MiddlewareClasses;
 
 public class HandlingExceptionsMiddleware
 {
-    public RequestDelegate _next { get; }
+    private RequestDelegate _next { get; }
     public HandlingExceptionsMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -55,7 +55,7 @@ public class HandlingExceptionsMiddleware
     }
     private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
     {
-        IReadOnlyDictionary<string, string[]> errors = null;
+        IReadOnlyDictionary<string, string[]> errors = null!;
         if (exception is ValidationException validationException)
         {
             errors = validationException.Errors.GroupBy(
