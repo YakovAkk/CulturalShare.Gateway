@@ -1,0 +1,1 @@
+The architecture of the project is on the site - https://app.icepanel.io/landscapes/89iwKyyyhMKJRl83kdRu/versions/latest/diagrams/editor?diagram=rlv393dxjzg&model=XeKIc9Lckt&overlay_tab=tags&x1=-48&y1=-9.8&x2=1552&y2=737.7
