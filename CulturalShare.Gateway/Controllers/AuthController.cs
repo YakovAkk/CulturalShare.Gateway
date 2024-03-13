@@ -20,6 +20,11 @@ public class AuthController : ControllerBase
     {
         try
         {
+            var header = new Metadata()
+            {
+                {"correlation_Id", Guid.NewGuid().ToString() }
+            };
+
             var result = await _authClient.LoginAsync(request, cancellationToken: cancellationToken);
             return Ok(result);
         }

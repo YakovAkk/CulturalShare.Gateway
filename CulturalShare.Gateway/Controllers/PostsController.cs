@@ -79,7 +79,7 @@ public class PostsController : ControllerBase
             var headers = await this.CreateSecureHeader(HttpContext, _authClient);
 
             var createPostRequest = request.MapTo<CreatePostRequest>();
-            createPostRequest.UserId = userId;
+            createPostRequest.OwnerId = userId;
 
             var result = await _postWriteClient.CreatePostAsync(createPostRequest, headers, cancellationToken: cancellationToken);
             return Ok(result);
@@ -95,11 +95,9 @@ public class PostsController : ControllerBase
     {
         try
         {
-            var userId = HttpHelper.GetCustomerId(HttpContext);
             var headers = await this.CreateSecureHeader(HttpContext, _authClient);
 
             var updatePostRequest = request.MapTo<UpdatePostRequest>();
-            updatePostRequest.UserId = userId;
 
             var result = await _postWriteClient.UpdatePostAsync(updatePostRequest, headers, cancellationToken: cancellationToken);
             return Ok(result);
@@ -115,12 +113,10 @@ public class PostsController : ControllerBase
     {
         try
         {
-            var userId = HttpHelper.GetCustomerId(HttpContext);
             var headers = await this.CreateSecureHeader(HttpContext, _authClient);
 
             var request = new DeletePostRequest()
             {
-                UserId = userId,
                 PostId = Id
             };
             var result = await _postWriteClient.DeletePostAsync(request, headers, cancellationToken: cancellationToken);
