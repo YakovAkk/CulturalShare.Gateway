@@ -3,12 +3,13 @@ using CulturalShare.Gateway.Configuration.Base;
 using CulturalShare.Gateway.Configuration.Model;
 using PostsReadProto;
 using PostsWriteProto;
+using Serilog.Core;
 
 namespace CulturalShare.Gateway.Configuration;
 
 public class GrpcClientServiceInstaller : IServiceInstaller
 {
-    public void Install(WebApplicationBuilder builder)
+    public void Install(WebApplicationBuilder builder, Logger logger)
     {
         var urls = builder.Configuration
             .GetSection("GrpcClientsUrls")
@@ -28,5 +29,7 @@ public class GrpcClientServiceInstaller : IServiceInstaller
         {
             options.Address = new Uri(urls.PostWriteClient);
         });
+
+        logger.Information($"{nameof(GrpcClientServiceInstaller)} installed.");
     }
 }
