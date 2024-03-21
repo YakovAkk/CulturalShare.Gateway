@@ -1,5 +1,6 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper;
+using CulturalShare.Common.Helper.Constants;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,16 +23,16 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {request}");
+        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {request}.");
 
         try
         {
-            var headers = HttpHelper.CreateHeaderWithCorrelationId();
+            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
             var result = await _authClient.LoginAsync(request, headers, cancellationToken: cancellationToken);
             return Ok(result);
         }
-        catch (RpcException)
+        catch (RpcException ex)
         {
             throw;
         }
@@ -44,7 +45,7 @@ public class AuthController : ControllerBase
 
         try
         {
-            var headers = HttpHelper.CreateHeaderWithCorrelationId();
+            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
             var result = await _authClient.RegistrationAsync(request, headers, cancellationToken: cancellationToken);
             return Ok(result);
@@ -62,7 +63,7 @@ public class AuthController : ControllerBase
 
         try
         {
-            var headers = HttpHelper.CreateHeaderWithCorrelationId();
+            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
             var result = await _authClient.RefreshTokenAsync(request, headers, cancellationToken: cancellationToken);
             return Ok(result);

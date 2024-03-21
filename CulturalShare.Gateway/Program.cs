@@ -1,6 +1,6 @@
+using CulturalShare.Common.Helper.Extensions;
 using CulturalShare.Gateway.Configuration.Base;
 using CulturalShare.Gateway.DependencyInjection;
-using CulturalShare.Gateway.Middleware.Extension;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
@@ -13,6 +13,7 @@ builder.InstallServices(logger, typeof(IServiceInstaller).Assembly);
 
 var app = builder.Build();
 
+app.UseCorrelationIdMiddleware();
 app.UseExceptionsHandler();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +33,8 @@ app.MapHealthChecks("/_health", new HealthCheckOptions()
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.UseHeaderPropagation();
 
 app.MapControllers();
 

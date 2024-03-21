@@ -1,4 +1,5 @@
-﻿using CulturalShare.Gateway.Configuration.Base;
+﻿using CulturalShare.Common.Helper.Constants;
+using CulturalShare.Gateway.Configuration.Base;
 using Serilog;
 using Serilog.Core;
 
@@ -12,8 +13,8 @@ public class LoggingServiceInstaller : IServiceInstaller
         {
             var configuration = builder.Configuration;
 
-            config.Enrich.WithCorrelationIdHeader("correlation_Id");
-            config.Enrich.WithProperty("Env", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            config.Enrich.WithCorrelationIdHeader(LoggingConsts.CorrelationIdHeaderName);
+            config.Enrich.WithProperty(LoggingConsts.Environment, Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             config.ReadFrom.Configuration(configuration);
         });
 

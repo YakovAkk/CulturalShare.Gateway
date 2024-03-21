@@ -93,7 +93,7 @@ public class PostsController : ControllerBase
         {
             var userId = HttpHelper.GetCustomerId(HttpContext);
             var headers = await this.CreateSecureHeader(HttpContext, _authClient);
-
+            
             var createPostRequest = request.MapTo<CreatePostRequest>();
             createPostRequest.OwnerId = userId;
 
