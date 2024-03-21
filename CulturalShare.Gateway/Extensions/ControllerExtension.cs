@@ -1,5 +1,6 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper;
+using CulturalShare.Common.Helper.Extensions;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,9 @@ public static class ControllerExtension
         };
         var accessToken = await client.GetOneTimeTokenAsync(accessTokenRequest);
 
-        var headers = HttpHelper.CreateAuthHeader(accessToken.AccessToken);
+        var headers = HttpHelper.CreateHeaderWithCorrelationId()
+            .AddAuthHeader(accessToken.AccessToken);
+
         return headers;
     }
 }
