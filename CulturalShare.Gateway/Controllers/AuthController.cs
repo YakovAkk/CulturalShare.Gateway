@@ -1,8 +1,8 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper;
-using CulturalShare.Common.Helper.Constants;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CulturalShare.Gateway.Controllers;
 
@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {request}.");
+        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {JsonConvert.SerializeObject(request)}.");
 
         try
         {
@@ -41,7 +41,7 @@ public class AuthController : ControllerBase
     [HttpPost("Registration")]
     public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(RegistrationAsync)} request. Boby = {request}");
+        _logger.LogDebug($"{nameof(RegistrationAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
 
         try
         {
@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request. Boby = {request}");
+        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
 
         try
         {

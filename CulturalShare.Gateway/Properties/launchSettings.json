@@ -31,12 +31,13 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/_health",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:8080"
+        "ASPNETCORE_URLS": "http://+:8080",
+        "ASPNETCORE_ENVIRONMENT": "Test"
       },
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": false
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json",

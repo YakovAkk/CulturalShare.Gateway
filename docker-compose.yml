@@ -1,6 +1,65 @@
 version: "3.9"
 
 services:
+  # gateway:
+  #   image: csharpaspnetcore6/cultural-share-gateway
+  #   environment:
+  #     - AUTH_SERVICE_URL=http://auth:4000
+  #     - POST_WRITE_SERVICE_URL=http://post-write:3000
+  #     - POST_READ_SERVICE_URL=http://post-read:2000
+
+  #   ports:
+  #     - "5000:8080"
+
+  # auth:
+  #   image: csharpaspnetcore6/cultural-share-auth
+  #   environment:
+  #     - HOST=postgres
+  #     - PORT=5432
+  #     - DB_NAME=AuthDB
+  #     - USER_NAME=docker
+  #     - PASSWORD=docker
+  #   ports:
+  #     - "4000:8080"
+
+  # post-write:
+  #   image: csharpaspnetcore6/cultural-share-post-write
+  #   environment:
+  #     - HOST=postgres
+  #     - PORT=5432
+  #     - DB_NAME=PostWriteDB
+  #     - USER_NAME=docker
+  #     - PASSWORD=docker
+  #   ports:
+  #     - "3000:8080"
+
+  # post-read:
+  #   image: csharpaspnetcore6/cultural-share-post-read
+  #   environment:
+  #     - MONGO_HOST=mongodb
+  #     - MONGO_PORT=27017
+  #     - MONGO_DB_NAME=PostReadDB
+  #   ports:
+  #     - "2000:8080"
+
+  # mongo-side-car:
+  #   image: csharpaspnetcore6/cultural-share-mongo-side-car
+  #   environment:
+  #     - DOTNET_RUNNING_IN_CONTAINER=true
+  #     - MONGO_HOST=mongodb
+  #     - MONGO_PORT=27017
+  #     - MONGO_DB_NAME=PostReadDB
+  #     - HOST=postgres
+  #     - PORT=5432
+  #     - DB_NAME=PostWriteDB
+  #     - USER_NAME=docker
+  #     - PASSWORD=docker
+  #     - KAFKA_URL=http://kafka:29092
+  #     - KAFKA_GROUP_ID=1d
+  #     - DEBEZIUM_URL=http://debezium:8083
+
+  #################### Services ####################
+
   mongodb:
     image: mongo
     container_name: my_mongodb
@@ -14,7 +73,6 @@ services:
     environment:
       - POSTGRES_USER=docker
       - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=exampledb
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.3
