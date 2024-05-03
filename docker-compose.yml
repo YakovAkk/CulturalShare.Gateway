@@ -1,6 +1,72 @@
 version: "3.9"
 
 services:
+  gateway:
+    image: csharpaspnetcore6/cultural-share-gateway
+    ports:
+      - "5000:8080"
+    environment:
+      - AUTH_SERVICE_URL=http://host.docker.internal:8880
+      - POST_WRITE_SERVICE_URL=http://host.docker.internal:7880
+      - POST_READ_SERVICE_URL=http://host.docker.internal:6880
+
+  auth:
+    image: csharpaspnetcore6/cultural-share-auth
+    environment:
+      - HOST=postgres
+      - PORT=5432
+      - DB_NAME=AuthDB
+      - USER_NAME=docker
+      - PASSWORD=docker
+    ports:
+      - "8880:8080"
+      - "8080:80"
+
+  post-write:
+    image: csharpaspnetcore6/cultural-share-post-write
+    environment:
+      - HOST=postgres
+      - PORT=5432
+      - DB_NAME=PostWriteDB
+      - USER_NAME=docker
+      - PASSWORD=docker
+    ports:
+      - "7880:7880"
+      - "7080:7080"
+
+  post-read:
+    image: csharpaspnetcore6/cultural-share-post-read
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DB_NAME=PostReadDB
+    ports:
+      - "6880:6880"
+      - "6080:6080"
+
+  # mongo-side-car:
+  #   image: csharpaspnetcore6/cultural-share-mongo-side-car
+  #   environment:
+  #     - DOTNET_RUNNING_IN_CONTAINER=true
+  #     - MONGO_HOST=mongodb
+  #     - MONGO_PORT=27017
+  #     - MONGO_DB_NAME=PostReadDB
+  #     - HOST=postgres
+  #     - PORT=5432
+  #     - DB_NAME=PostWriteDB
+  #     - USER_NAME=docker
+  #     - PASSWORD=docker
+  #     - DEBEZIUM_URL=http://host.docker.internal:8083
+  #     - KAFKA_GROUP_ID=yakiv_group
+  #     - KAFKA_URL=http://host.docker.internal:29092
+  #   depends_on:
+  #     - post-read
+  #     - post-write
+  #     - debezium
+  #     - mongodb
+  #     - postgres
+  #################### Services ####################
+
   mongodb:
     image: mongo
     container_name: my_mongodb
@@ -14,7 +80,6 @@ services:
     environment:
       - POSTGRES_USER=docker
       - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=exampledb
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.3

@@ -1,5 +1,6 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper;
+using CulturalShare.Common.Helper.Extensions;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,22 @@ public static class ControllerExtension
             UserId = userId,
             Email = userEmail
         };
-        var accessToken = await client.GetOneTimeTokenAsync(accessTokenRequest);
 
-        var headers = HttpHelper.CreateAuthHeader(accessToken.AccessToken);
+        var authHeaders = HttpHelper.CreateHeaderWithCorrelationId(httpContext);
+
+        var accessToken = await client.GetOneTimeTokenAsync(accessTokenRequest, headers: authHeaders);
+
+        var headers = new Metadata()
+            .AddAuthHeader(accessToken.AccessToken);
+
+        return headers;
+    }
+
+    public static async Task<Metadata> CreateSecureHeaderWithCorrelationId(this ControllerBase controllerBase, HttpContext httpContext, Authentication.AuthenticationClient client)
+    {
+        var headers = await CreateSecureHeader(controllerBase, httpContext, client);
+        headers.AddCorrelationIdHeader(httpContext);
+
         return headers;
     }
 }

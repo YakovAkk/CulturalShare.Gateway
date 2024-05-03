@@ -1,6 +1,8 @@
 ﻿using AuthenticationProto;
+using CulturalShare.Common.Helper;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CulturalShare.Gateway.Controllers;
 
@@ -9,26 +11,28 @@ namespace CulturalShare.Gateway.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly Authentication.AuthenticationClient _authClient;
+    private readonly ILogger<PostsController> _logger;
 
-    public AuthController(Authentication.AuthenticationClient authClient)
+    public AuthController(Authentication.AuthenticationClient authClient, 
+        ILogger<PostsController> logger)
     {
         _authClient = authClient;
+        _logger = logger;
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request,CancellationToken cancellationToken)
+    public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
+        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {JsonConvert.SerializeObject(request)}.");
+
         try
         {
-            var header = new Metadata()
-            {
-                {"correlation_Id", Guid.NewGuid().ToString() }
-            };
+            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
-            var result = await _authClient.LoginAsync(request, cancellationToken: cancellationToken);
+            var result = await _authClient.LoginAsync(request, headers, cancellationToken: cancellationToken);
             return Ok(result);
         }
-        catch (RpcException)
+        catch (RpcException ex)
         {
             throw;
         }
@@ -37,9 +41,13 @@ public class AuthController : ControllerBase
     [HttpPost("Registration")]
     public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationRequest request, CancellationToken cancellationToken)
     {
+        _logger.LogDebug($"{nameof(RegistrationAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
+
         try
         {
-            var result = await _authClient.RegistrationAsync(request, cancellationToken: cancellationToken);
+            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
+
+            var result = await _authClient.RegistrationAsync(request, headers, cancellationToken: cancellationToken);
             return Ok(result);
         }
         catch (RpcException)
@@ -51,9 +59,13 @@ public class AuthController : ControllerBase
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
+        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
+
         try
         {
-            var result = await _authClient.RefreshTokenAsync(request, cancellationToken: cancellationToken);
+            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
+
+            var result = await _authClient.RefreshTokenAsync(request, headers, cancellationToken: cancellationToken);
             return Ok(result);
         }
         catch (RpcException)
