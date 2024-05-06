@@ -23,7 +23,8 @@ public class PostsController : ControllerBase
     private readonly Authentication.AuthenticationClient _authClient;
     private readonly ILogger<PostsController> _logger;
 
-    public PostsController(PostsRead.PostsReadClient postsClient, 
+    public PostsController(
+        PostsRead.PostsReadClient postsClient, 
         PostsWrite.PostsWriteClient postWriteClient, 
         Authentication.AuthenticationClient authClient, 
         ILogger<PostsController> logger)
@@ -39,23 +40,16 @@ public class PostsController : ControllerBase
     {
         _logger.LogDebug($"{nameof(GetPostsAsync)} request.");
 
-        try 
-        {
-            var userId = HttpHelper.GetCustomerId(HttpContext);
-            var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
+        var userId = HttpHelper.GetCustomerId(HttpContext);
+        var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
 
-            var request = new GetPostsRequest()
-            {
-                UserId = userId,
-            };
-
-            var result = await _postReadClient.GetPostsAsync(request, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (RpcException)
+        var request = new GetPostsRequest()
         {
-            throw;
-        }
+            UserId = userId,
+        };
+
+        var result = await _postReadClient.GetPostsAsync(request, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 
     [HttpGet("{Id}")]
@@ -63,24 +57,17 @@ public class PostsController : ControllerBase
     {
         _logger.LogDebug($"{nameof(GetPostByIdAsync)} request with Id = {Id}");
 
-        try
-        {
-            var userId = HttpHelper.GetCustomerId(HttpContext);
-            var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
+        var userId = HttpHelper.GetCustomerId(HttpContext);
+        var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
 
-            var request = new GetPostByIdRequest()
-            {
-                UserId = userId,
-                Id = Id
-            };
-
-            var result = await _postReadClient.GetPostByIdAsync(request, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (Exception)
+        var request = new GetPostByIdRequest()
         {
-            throw;
-        }
+            UserId = userId,
+            Id = Id
+        };
+
+        var result = await _postReadClient.GetPostByIdAsync(request, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -88,21 +75,14 @@ public class PostsController : ControllerBase
     {
         _logger.LogDebug($"{nameof(CreatePostAsync)} request. Body = {JsonConvert.SerializeObject(request)}");
 
-        try
-        {
-            var userId = HttpHelper.GetCustomerId(HttpContext);
-            var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
+        var userId = HttpHelper.GetCustomerId(HttpContext);
+        var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
 
-            var createPostRequest = request.MapTo<CreatePostRequest>();
-            createPostRequest.OwnerId = userId;
+        var createPostRequest = request.MapTo<CreatePostRequest>();
+        createPostRequest.OwnerId = userId;
 
-            var result = await _postWriteClient.CreatePostAsync(createPostRequest, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        var result = await _postWriteClient.CreatePostAsync(createPostRequest, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 
     [HttpPut]
@@ -110,19 +90,12 @@ public class PostsController : ControllerBase
     {
         _logger.LogDebug($"{nameof(UpdatePostAsync)} request. Body = {JsonConvert.SerializeObject(request)}");
 
-        try
-        {
-            var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
+        var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
 
-            var updatePostRequest = request.MapTo<UpdatePostRequest>();
+        var updatePostRequest = request.MapTo<UpdatePostRequest>();
 
-            var result = await _postWriteClient.UpdatePostAsync(updatePostRequest, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        var result = await _postWriteClient.UpdatePostAsync(updatePostRequest, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 
     [HttpDelete("{Id}")]
@@ -130,20 +103,13 @@ public class PostsController : ControllerBase
     {
         _logger.LogDebug($"{nameof(DeletePostAsync)} request with Id = {Id}");
 
-        try
-        {
-            var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
+        var headers = await this.CreateSecureHeaderWithCorrelationId(HttpContext, _authClient);
 
-            var request = new DeletePostRequest()
-            {
-                PostId = Id
-            };
-            var result = await _postWriteClient.DeletePostAsync(request, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (Exception)
+        var request = new DeletePostRequest()
         {
-            throw;
-        }
+            PostId = Id
+        };
+        var result = await _postWriteClient.DeletePostAsync(request, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 }
