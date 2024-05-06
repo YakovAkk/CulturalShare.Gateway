@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {JsonConvert.SerializeObject(request)}.");
+        _logger.LogDebug($"{nameof(LoginAsync)} request.");
 
         try
         {
@@ -41,7 +41,7 @@ public class AuthController : ControllerBase
     [HttpPost("Registration")]
     public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(RegistrationAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
+        _logger.LogDebug($"{nameof(RegistrationAsync)} request.");
 
         try
         {
@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
+        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request.");
 
         try
         {
