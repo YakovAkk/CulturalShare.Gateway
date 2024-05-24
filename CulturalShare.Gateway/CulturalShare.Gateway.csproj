@@ -13,9 +13,9 @@
 	    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
-	<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
-    <PackageReference Include="CulturalShare.Common.Helper" Version="8.0.21" />
+    <PackageReference Include="CulturalShare.Common.Helper" Version="8.0.23" />
     <PackageReference Include="CulturalShare.Protos" Version="8.0.5" />
     <PackageReference Include="FluentValidation" Version="11.9.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />

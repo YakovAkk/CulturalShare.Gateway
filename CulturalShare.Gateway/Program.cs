@@ -13,8 +13,8 @@ builder.InstallServices(logger, typeof(IServiceInstaller).Assembly);
 
 var app = builder.Build();
 
-app.UseCorrelationIdMiddleware();
 app.UseExceptionsHandler();
+app.UseCorrelationIdMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

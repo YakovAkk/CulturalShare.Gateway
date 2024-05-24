@@ -1,8 +1,6 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper;
-using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace CulturalShare.Gateway.Controllers;
 
@@ -23,54 +21,33 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(LoginAsync)} request. Boby = {JsonConvert.SerializeObject(request)}.");
+        _logger.LogDebug($"{nameof(LoginAsync)} request.");
 
-        try
-        {
-            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
+        var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
-            var result = await _authClient.LoginAsync(request, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (RpcException ex)
-        {
-            throw;
-        }
+        var result = await _authClient.LoginAsync(request, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 
     [HttpPost("Registration")]
     public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(RegistrationAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
+        _logger.LogDebug($"{nameof(RegistrationAsync)} request.");
 
-        try
-        {
-            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
+        var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
-            var result = await _authClient.RegistrationAsync(request, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (RpcException)
-        {
-            throw;
-        }
+        var result = await _authClient.RegistrationAsync(request, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request. Boby = {JsonConvert.SerializeObject(request)}");
+        _logger.LogDebug($"{nameof(RefreshTokenAsync)} request.");
 
-        try
-        {
-            var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
+        var headers = HttpHelper.CreateHeaderWithCorrelationId(HttpContext);
 
-            var result = await _authClient.RefreshTokenAsync(request, headers, cancellationToken: cancellationToken);
-            return Ok(result);
-        }
-        catch (RpcException)
-        {
-            throw;
-        }
+        var result = await _authClient.RefreshTokenAsync(request, headers, cancellationToken: cancellationToken);
+        return Ok(result);
     }
 }
