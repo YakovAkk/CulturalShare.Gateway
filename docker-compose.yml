@@ -1,48 +1,60 @@
 version: "3.9"
 
 services:
-  # gateway:
-  #   image: csharpaspnetcore6/cultural-share-gateway
-  #   ports:
-  #     - "5000:8080"
-  #   environment:
-  #     - AUTH_SERVICE_URL=http://host.docker.internal:8880
-  #     - POST_WRITE_SERVICE_URL=http://host.docker.internal:7880
-  #     - POST_READ_SERVICE_URL=http://host.docker.internal:6880
+  gateway:
+    image: csharpaspnetcore6/cultural-share-gateway:1.1
+    ports:
+      - "5000:8080"
+    environment:
+      - AUTH_SERVICE_URL=http://host.docker.internal:8880
+      - POST_WRITE_SERVICE_URL=http://host.docker.internal:7880
+      - POST_READ_SERVICE_URL=http://host.docker.internal:6880
+      - GRAYLOG_HOST=graylog
+      - GRAYLOG_PORT=12201
+      - GRAYLOG_TRANSPORT_TYPE=Udp
 
-  # auth:
-  #   image: csharpaspnetcore6/cultural-share-auth
-  #   environment:
-  #     - HOST=postgres
-  #     - PORT=5432
-  #     - DB_NAME=AuthDB
-  #     - USER_NAME=docker
-  #     - PASSWORD=docker
-  #   ports:
-  #     - "8880:8080"
-  #     - "8080:80"
+  auth:
+    image: csharpaspnetcore6/cultural-share-auth:1.1
+    environment:
+      - HOST=postgres
+      - PORT=5432
+      - DB_NAME=AuthDB
+      - USER_NAME=docker
+      - PASSWORD=docker
+      - GRAYLOG_HOST=graylog
+      - GRAYLOG_PORT=12201
+      - GRAYLOG_TRANSPORT_TYPE=Udp
+    ports:
+      - "8880:8080"
+      - "8080:80"
 
-  # post-write:
-  #   image: csharpaspnetcore6/cultural-share-post-write
-  #   environment:
-  #     - HOST=postgres
-  #     - PORT=5432
-  #     - DB_NAME=PostWriteDB
-  #     - USER_NAME=docker
-  #     - PASSWORD=docker
-  #   ports:
-  #     - "7880:7880"
-  #     - "7080:7080"
+  post-write:
+    image: csharpaspnetcore6/cultural-share-post-write:1.1
+    environment:
+      - HOST=postgres
+      - PORT=5432
+      - DB_NAME=PostWriteDB
+      - USER_NAME=docker
+      - PASSWORD=docker
+      - GRAYLOG_HOST=graylog
+      - GRAYLOG_PORT=12201
+      - GRAYLOG_TRANSPORT_TYPE=Udp
+    ports:
+      - "7880:7880"
+      - "7080:7080"
 
-  # post-read:
-  #   image: csharpaspnetcore6/cultural-share-post-read
-  #   environment:
-  #     - MONGO_HOST=mongodb
-  #     - MONGO_PORT=27017
-  #     - MONGO_DB_NAME=PostReadDB
-  #   ports:
-  #     - "6880:6880"
-  #     - "6080:6080"
+  post-read:
+    image: csharpaspnetcore6/cultural-share-post-read:1.1
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DB_NAME=PostReadDB
+      - GRAYLOG_HOST=graylog
+      - GRAYLOG_PORT=12201
+      - GRAYLOG_TRANSPORT_TYPE=Udp
+    ports:
+      - "6880:6880"
+      - "6080:6080"
 
   # mongo-side-car:
   #   image: csharpaspnetcore6/cultural-share-mongo-side-car
