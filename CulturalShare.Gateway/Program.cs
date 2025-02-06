@@ -17,7 +17,7 @@ app.UseExceptionsHandler();
 app.UseCorrelationIdMiddleware();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsEnvironment("Test"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
