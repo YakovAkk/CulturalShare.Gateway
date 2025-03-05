@@ -1,11 +1,9 @@
 ﻿using CulturalShare.Common.Helper.Constants;
+using CulturalShare.Common.Helper.EnvHelpers;
 using CulturalShare.Gateway.Configuration.Base;
 using Serilog;
 using Serilog.Core;
 using Serilog.Sinks.Graylog;
-using CulturalShare.Common.Helper.EnvHelpers;
-using CulturalShare.Common.Helper.Configurations;
-using Newtonsoft.Json;
 
 namespace CulturalShare.Gateway.Configuration;
 

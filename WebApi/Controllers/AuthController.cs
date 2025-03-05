@@ -11,14 +11,14 @@ public class AuthController : ControllerBase
     private readonly Authentication.AuthenticationClient _authClient;
     private readonly ILogger<PostsController> _logger;
 
-    public AuthController(Authentication.AuthenticationClient authClient, 
+    public AuthController(Authentication.AuthenticationClient authClient,
         ILogger<PostsController> logger)
     {
         _authClient = authClient;
         _logger = logger;
     }
 
-    [HttpPost("Login")]
+    [HttpPost("SignIn")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
         _logger.LogDebug($"{nameof(LoginAsync)} request.");
@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("Registration")]
+    [HttpPost("SignUp")]
     public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationRequest request, CancellationToken cancellationToken)
     {
         _logger.LogDebug($"{nameof(RegistrationAsync)} request.");
