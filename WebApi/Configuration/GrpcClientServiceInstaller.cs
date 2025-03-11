@@ -1,7 +1,6 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper.EnvHelpers;
 using CulturalShare.Gateway.Configuration.Base;
-using Grpc.Core;
 using Newtonsoft.Json;
 using PostsReadProto;
 using PostsWriteProto;

@@ -1,10 +1,8 @@
 ﻿using AuthenticationProto;
 using CulturalShare.Common.Helper;
-using CulturalShare.Common.Helper.Extensions;
 using CulturalShare.Gateway.Extensions;
 using CulturalShare.Gateway.Models.Model.Request;
 using CulturalShare.GatewayCommon;
-using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -24,9 +22,9 @@ public class PostsController : ControllerBase
     private readonly ILogger<PostsController> _logger;
 
     public PostsController(
-        PostsRead.PostsReadClient postsClient, 
-        PostsWrite.PostsWriteClient postWriteClient, 
-        Authentication.AuthenticationClient authClient, 
+        PostsRead.PostsReadClient postsClient,
+        PostsWrite.PostsWriteClient postWriteClient,
+        Authentication.AuthenticationClient authClient,
         ILogger<PostsController> logger)
     {
         _postReadClient = postsClient;

@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
+
 builder.InstallServices(logger, typeof(IServiceInstaller).Assembly);
 
 var app = builder.Build();
