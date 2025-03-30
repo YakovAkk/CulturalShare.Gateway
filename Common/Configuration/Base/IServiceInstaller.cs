@@ -1,4 +1,5 @@
-﻿using Serilog.Core;
+﻿using Microsoft.AspNetCore.Builder;
+using Serilog.Core;
 
 namespace CulturalShare.Gateway.Configuration.Base;
 

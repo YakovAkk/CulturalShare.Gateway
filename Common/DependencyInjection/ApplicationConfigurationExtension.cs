@@ -1,4 +1,5 @@
 ﻿using CulturalShare.Gateway.Configuration.Base;
+using Microsoft.AspNetCore.Builder;
 using Serilog.Core;
 using System.Reflection;
 
