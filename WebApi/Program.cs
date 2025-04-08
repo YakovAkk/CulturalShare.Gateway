@@ -1,4 +1,4 @@
-using CulturalShare.Common.Helper.Extensions;
+using CulturalShare.Foundation.AspNetCore.Extensions.Extensions;
 using CulturalShare.Gateway.Configuration.Base;
 using CulturalShare.Gateway.DependencyInjection;
 using HealthChecks.UI.Client;

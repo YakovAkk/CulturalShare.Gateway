@@ -6,8 +6,36 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ValueInjecter" Version="3.2.0" />
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<UserSecretsId>1071abf9-0651-4199-92dd-64c464274c0a</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
+	  <PackageReference Include="CulturalShare.Foundation.AspNetCore.Extensions" Version="8.0.0" />
+	  <PackageReference Include="CulturalShare.Foundation.EntironmentHelper" Version="8.0.0" />
+	  <PackageReference Include="CulturalShare.Protos" Version="8.0.9" />
+	  <PackageReference Include="CulturalShare.Common.Helper" Version="8.0.26" />
+	  <PackageReference Include="FluentValidation" Version="11.9.1" />
+	  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
+	  <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="8.0.4" />
+	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	  <PackageReference Include="Serilog" Version="3.1.1" />
+	  <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+	  <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
+	  <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+	  <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+	  <PackageReference Include="Serilog.Sinks.Graylog" Version="3.1.1" />
+	  <PackageReference Include="CulturalShare.Foundation.Authorization" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

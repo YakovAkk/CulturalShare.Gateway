@@ -1,6 +1,8 @@
 ﻿using AuthenticationProto;
-using CulturalShare.Common.Helper.EnvHelpers;
+using CulturalShare.Foundation.EntironmentHelper.EnvHelpers;
 using CulturalShare.Gateway.Configuration.Base;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PostsReadProto;
 using PostsWriteProto;
@@ -16,7 +18,12 @@ public class GrpcClientServiceInstaller : IServiceInstaller
 
         var grpcClientsUrlConfiguration = sortOutCredentialsHelper.GetGrpcClientsUrlConfiguration();
 
-        builder.Services.AddGrpcClient<Authentication.AuthenticationClient>(options =>
+        builder.Services.AddGrpcClient<AuthenticationGrpcService.AuthenticationGrpcServiceClient>(options =>
+        {
+            options.Address = new Uri(grpcClientsUrlConfiguration.AuthClientUrl);
+        });
+
+        builder.Services.AddGrpcClient<UserGrpcService.UserGrpcServiceClient>(options =>
         {
             options.Address = new Uri(grpcClientsUrlConfiguration.AuthClientUrl);
         });
