@@ -1,60 +1,60 @@
 version: "3.9"
 
 services:
-  gateway:
-    image: csharpaspnetcore6/cultural-share-gateway:1.1
-    ports:
-      - "5000:8080"
-    environment:
-      - AUTH_SERVICE_URL=http://host.docker.internal:8880
-      - POST_WRITE_SERVICE_URL=http://host.docker.internal:7880
-      - POST_READ_SERVICE_URL=http://host.docker.internal:6880
-      - GRAYLOG_HOST=graylog
-      - GRAYLOG_PORT=12201
-      - GRAYLOG_TRANSPORT_TYPE=Udp
+  # gateway:
+  #   image: csharpaspnetcore6/cultural-share-gateway:1.1
+  #   ports:
+  #     - "5000:8080"
+  #   environment:
+  #     - AUTH_SERVICE_URL=http://host.docker.internal:8880
+  #     - POST_WRITE_SERVICE_URL=http://host.docker.internal:7880
+  #     - POST_READ_SERVICE_URL=http://host.docker.internal:6880
+  #     - GRAYLOG_HOST=graylog
+  #     - GRAYLOG_PORT=12201
+  #     - GRAYLOG_TRANSPORT_TYPE=Udp
 
-  auth:
-    image: csharpaspnetcore6/cultural-share-auth:1.1
-    environment:
-      - HOST=postgres
-      - PORT=5432
-      - DB_NAME=AuthDB
-      - USER_NAME=docker
-      - PASSWORD=docker
-      - GRAYLOG_HOST=graylog
-      - GRAYLOG_PORT=12201
-      - GRAYLOG_TRANSPORT_TYPE=Udp
-    ports:
-      - "8880:8080"
-      - "8080:80"
+  # auth:
+  #   image: csharpaspnetcore6/cultural-share-auth:1.1
+  #   environment:
+  #     - HOST=postgres
+  #     - PORT=5432
+  #     - DB_NAME=AuthDB
+  #     - USER_NAME=docker
+  #     - PASSWORD=docker
+  #     - GRAYLOG_HOST=graylog
+  #     - GRAYLOG_PORT=12201
+  #     - GRAYLOG_TRANSPORT_TYPE=Udp
+  #   ports:
+  #     - "8880:8080"
+  #     - "8080:80"
 
-  post-write:
-    image: csharpaspnetcore6/cultural-share-post-write:1.1
-    environment:
-      - HOST=postgres
-      - PORT=5432
-      - DB_NAME=PostWriteDB
-      - USER_NAME=docker
-      - PASSWORD=docker
-      - GRAYLOG_HOST=graylog
-      - GRAYLOG_PORT=12201
-      - GRAYLOG_TRANSPORT_TYPE=Udp
-    ports:
-      - "7880:7880"
-      - "7080:7080"
+  # post-write:
+  #   image: csharpaspnetcore6/cultural-share-post-write:1.1
+  #   environment:
+  #     - HOST=postgres
+  #     - PORT=5432
+  #     - DB_NAME=PostWriteDB
+  #     - USER_NAME=docker
+  #     - PASSWORD=docker
+  #     - GRAYLOG_HOST=graylog
+  #     - GRAYLOG_PORT=12201
+  #     - GRAYLOG_TRANSPORT_TYPE=Udp
+  #   ports:
+  #     - "7880:7880"
+  #     - "7080:7080"
 
-  post-read:
-    image: csharpaspnetcore6/cultural-share-post-read:1.1
-    environment:
-      - MONGO_HOST=mongodb
-      - MONGO_PORT=27017
-      - MONGO_DB_NAME=PostReadDB
-      - GRAYLOG_HOST=graylog
-      - GRAYLOG_PORT=12201
-      - GRAYLOG_TRANSPORT_TYPE=Udp
-    ports:
-      - "6880:6880"
-      - "6080:6080"
+  # post-read:
+  #   image: csharpaspnetcore6/cultural-share-post-read:1.1
+  #   environment:
+  #     - MONGO_HOST=mongodb
+  #     - MONGO_PORT=27017
+  #     - MONGO_DB_NAME=PostReadDB
+  #     - GRAYLOG_HOST=graylog
+  #     - GRAYLOG_PORT=12201
+  #     - GRAYLOG_TRANSPORT_TYPE=Udp
+  #   ports:
+  #     - "6880:6880"
+  #     - "6080:6080"
 
   # mongo-side-car:
   #   image: csharpaspnetcore6/cultural-share-mongo-side-car
@@ -197,3 +197,13 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
+
+  redis:
+    image: redis:7.2-alpine # You can use 'redis:latest' or pin to a stable version
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    command: redis-server --appendonly yes # Enables AOF persistence
+    environment:
+      - REDIS_PASSWORD=123qsef!wWSFF@@

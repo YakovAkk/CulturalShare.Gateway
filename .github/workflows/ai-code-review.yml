@@ -1,0 +1,80 @@
+name: .NET CI Quality Gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      - develop
+      - feature/
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Pull your repository code into the runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2) Install the required .NET SDK version
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      # 3) Cache NuGet packages to speed up pipeline runs
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.fsproj', '**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      # 4) Restore dependencies (NuGet packages)
+      - name: Restore
+        run: dotnet restore
+
+      # 5) Optional: Code formatting check (fails if formatting differs)
+      - name: Format Check
+        run: dotnet format --verify-no-changes
+        continue-on-error: true
+
+      # 6) Build the solution in Release mode (no restore because we already did it)
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # 7) Run tests (with coverage collection)
+      - name: Test with Coverage
+        run: >
+          dotnet test
+          --configuration Release
+          --no-build
+          --collect:"XPlat Code Coverage"
+
+      # 8) Upload test results / coverage artifacts (handy for debugging)
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-and-coverage
+          path: |
+            **/TestResults/**
+            **/coverage.cobertura.xml
+        if: always()
+
+      # 9) Security scan of NuGet packages (vulnerabilities)
+      - name: NuGet Vulnerability Scan
+        run: dotnet list package --vulnerable
+
+      # 10) Publish app (produces deployable output)
+      - name: Publish
+        run: dotnet publish --configuration Release --no-build --output ./out
+
+      # 11) Upload published output as artifact (can be used by a CD workflow)
+      - name: Upload Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-app
+          path: ./out
