@@ -27,7 +27,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "9.0.x"
+          dotnet-version: "9.0.x" # change to "8.0.x" if your repo targets .NET 8
 
       - name: Cache NuGet
         uses: actions/cache@v4
@@ -37,8 +37,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      # 🔐 Configure GitHub Packages authentication
+      # 🔐 Configure GitHub Packages authentication (private NuGet feed)
       - name: Configure GitHub Packages source
+        shell: bash
         run: |
           dotnet nuget remove source CulturalShare || true
           dotnet nuget add source "https://nuget.pkg.github.com/YakovAkk/index.json" \
@@ -50,6 +51,7 @@ jobs:
       - name: Restore
         run: dotnet restore
 
+      # Optional: keep as warning (does not block merge)
       - name: Format Check
         run: dotnet format --verify-no-changes
         continue-on-error: true
@@ -70,11 +72,72 @@ jobs:
           name: test-and-coverage
           path: |
             **/TestResults/**
-            **/coverage.cobertura.xml
         if: always()
 
-      - name: NuGet Vulnerability Scan
-        run: dotnet list package --vulnerable
+      - name: Coverage Check
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          threshold: 75%
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Enforce coverage threshold (>= 75%)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "🔍 Searching for coverage report..."
+
+          file=$(find . -name "coverage.cobertura.xml" -type f | head -n 1)
+
+          if [ -z "$file" ]; then
+            echo "❌ ERROR: coverage.cobertura.xml not found."
+            exit 1
+          fi
+
+          echo "📄 Coverage file found: $file"
+
+          rate=$(grep -oP 'line-rate="\K[0-9.]+' "$file" | head -n 1)
+
+          if [ -z "$rate" ]; then
+            echo "❌ ERROR: Could not extract line-rate from coverage file."
+            exit 1
+          fi
+
+          percent=$(python3 - <<PY
+          rate=float("$rate")
+          print(f"{rate*100:.2f}")
+          PY
+          )
+
+              threshold=75
+
+              echo "📊 Coverage result: ${percent}%"
+              echo "🎯 Required minimum: ${threshold}%"
+
+              python3 - <<PY
+          rate=float("$rate")
+          threshold=0.75
+          import sys
+          if rate >= threshold:
+              print("✅ SUCCESS: Coverage meets the required threshold.")
+              sys.exit(0)
+          else:
+              print("❌ FAILURE: Coverage is below the required threshold.")
+              sys.exit(1)
+          PY
+
+      - name: NuGet Vulnerability Scan (fail on vulnerable packages)
+        shell: bash
+        run: |
+          set -e
+          output="$(dotnet list package --vulnerable)"
+          echo "$output"
+          if echo "$output" | grep -q "has the following vulnerable packages"; then
+            echo "❌ Vulnerable packages found."
+            exit 1
+          fi
 
       - name: Publish
         run: dotnet publish --configuration Release --no-build --output ./out
